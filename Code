@@ -1,0 +1,44 @@
+# Re-run this cell 
+import pandas as pd
+
+# Read in the data
+schools = pd.read_csv("schools.csv")        #Reading from dataset
+schools.head()
+# Preview the data
+
+best_math_schools=schools[schools["average_math"] >= 640][["school_name", "average_math"]]              #sabse phle sortlist krega phir schools ke sirf do column ko lega
+
+
+best_math_schools=best_math_schools.sort_values("average_math",ascending=False)                         #vales ko sort krega decending order me
+
+
+best_math_schools.head()
+
+schools["total_Sat"]=schools["average_math"]+schools["average_reading"]+schools["average_writing"]          #schools dataset me naya column banayega or teeno column ko usme add kregaa
+
+
+top_10=schools.sort_values("total_Sat",ascending=False)[["school_name", "total_Sat"]]               # iss naye column ke bae p value ko sort krega or phir sirf do column ko lega
+
+top_10.head(10)
+
+boroughs=schools.groupby("borough")["total_Sat"].agg(["count", "mean", "std"]).round(2)         # naya datset banayega jisme phle schoole ke "borough" wale column ko groupby krega phir total_sat wale column ke hisaaab se mean count or standard deviation nikalega
+boroughs.head()
+
+
+max_std=boroughs["std"].max()
+                                # ye maxmium standard deviation nikalega
+largest_std_dev=boroughs[boroughs["std"] ==max_std ]
+
+                                    #ye sirf usi column ko ek nya dataframe me lega jisi value uss maxmimum  standard deviation se match krega
+    
+largest_std_dev = largest_std_dev.rename(columns={"count": "num_schools", "mean": "average_SAT", "std": "std_SAT"})
+
+                                # ye sare column ko rename krega
+largest_std_dev.reset_index(inplace=True)
+                                # ye column ki position ko shi krega
+largest_std_dev.head()
+
+
+
+# Start coding here...
+# Add as many cells as you like...
